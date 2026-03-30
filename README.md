@@ -17,7 +17,7 @@
 ## ⚡ One-Line Install
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/sanona-ltd/starhosting/main/install.sh)
+curl -fsSL https://raw.githubusercontent.com/sanona-ltd/starhosting/main/install.sh -o /tmp/starhosting-install.sh && sudo bash /tmp/starhosting-install.sh
 ```
 
 > Requires Ubuntu 22.04/24.04 or Debian 11/12. Run as root.

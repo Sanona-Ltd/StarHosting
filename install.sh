@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # StarHosting Installer
 # Supports: Ubuntu 22.04, 24.04 / Debian 11, 12
-# Run as root: bash <(curl -fsSL https://raw.githubusercontent.com/sanona-ltd/starhosting/main/install.sh)
+# Run as root:
+#   curl -fsSL https://raw.githubusercontent.com/sanona-ltd/starhosting/main/install.sh -o /tmp/starhosting-install.sh && sudo bash /tmp/starhosting-install.sh
 
 set -euo pipefail
 
