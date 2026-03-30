@@ -221,7 +221,9 @@ install_webserver() {
             wget -qO - https://rpms.litespeedtech.com/debian/enable_lst_debian_repo.sh | bash >/dev/null 2>&1
             apt-get update -qq
             apt-get install -y -qq openlitespeed lsphp83 lsphp83-common lsphp83-sqlite3
-            systemctl enable lsws
+            # OLS uses a linked unit file; "enable" may refuse, but the package already configures it
+            systemctl enable lsws 2>/dev/null || systemctl enable --now lshttpd 2>/dev/null || true
+            systemctl start lsws 2>/dev/null || systemctl start lshttpd 2>/dev/null || true
             success "OpenLiteSpeed installed."
             ;;
     esac
