@@ -284,7 +284,7 @@ clone_app() {
 setup_app() {
     info "Installing PHP dependencies…"
     cd "$INSTALL_DIR"
-    composer install --no-interaction --no-dev --optimize-autoloader --quiet
+    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --no-dev --optimize-autoloader --quiet
     success "Composer packages installed."
 
     info "Creating .env file…"
