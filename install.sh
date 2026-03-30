@@ -282,10 +282,7 @@ clone_app() {
 }
 
 setup_app() {
-    info "Installing PHP dependencies…"
     cd "$INSTALL_DIR"
-    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --no-dev --optimize-autoloader --quiet
-    success "Composer packages installed."
 
     info "Creating .env file…"
     cp "$INSTALL_DIR/.env.example" "$INSTALL_DIR/.env"
@@ -296,10 +293,15 @@ setup_app() {
     if [[ "$INSTALL_MAIL" == true ]]; then
         sed -i "s/PANEL_MAIL=false/PANEL_MAIL=true/" "$INSTALL_DIR/.env"
     fi
+    success ".env configured."
 
     info "Creating var/ directory…"
     mkdir -p "$INSTALL_DIR/var"
     chown -R www-data:www-data "$INSTALL_DIR/var"
+
+    info "Installing PHP dependencies…"
+    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --no-dev --optimize-autoloader --quiet
+    success "Composer packages installed."
 
     info "Running database migrations…"
     php "$INSTALL_DIR/bin/console" doctrine:migrations:migrate --no-interaction --quiet
