@@ -1,0 +1,187 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mail — StarHosting{% endblock %}
+{% block page_title %}Mail{% endblock %}
+
+{% block content %}
+
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div>
+        <h2 class="text-xl font-bold text-white">Mail Domains</h2>
+        <p class="text-slate-400 text-sm mt-0.5">{{ domains|length }} domain{{ domains|length != 1 ? 's' : '' }} configured</p>
+    </div>
+    <a href="{{ path('app_mail_account_create') }}"
+       class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-lg transition-colors shadow-lg shadow-indigo-500/20">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        New Mailbox
+    </a>
+</div>
+
+{# Add domain form #}
+<div class="bg-slate-800 border border-slate-700 rounded-xl p-5 mb-6">
+    <h3 class="text-white font-semibold text-sm mb-4 flex items-center gap-2">
+        <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Add Mail Domain
+    </h3>
+    <form method="post" action="{{ path('app_mail_domain_add') }}" class="flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+            </div>
+            <input type="text" name="domain" required placeholder="mail.example.com"
+                   class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors">
+        </div>
+        <button type="submit"
+                class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-lg transition-colors whitespace-nowrap">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Add Domain
+        </button>
+    </form>
+</div>
+
+{# Domains accordion #}
+{% if domains is empty %}
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-12 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-slate-700 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+        </div>
+        <h3 class="text-white font-semibold text-base mb-1">No mail domains yet</h3>
+        <p class="text-slate-400 text-sm">Add a mail domain above to get started.</p>
+    </div>
+{% else %}
+    <div class="space-y-3">
+        {% for mailDomain in domains %}
+            <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden" x-data="{ open: true }">
+                {# Domain header #}
+                <button type="button" @click="open = !open"
+                        class="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-700/40 transition-colors text-left">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-600/20 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium text-sm">{{ mailDomain.domain }}</p>
+                            <p class="text-slate-500 text-xs">{{ mailDomain.mailAccounts|length }} account{{ mailDomain.mailAccounts|length != 1 ? 's' : '' }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-slate-500 text-xs">
+                            {{ mailDomain.createdAt ? mailDomain.createdAt|date('M j, Y') : '' }}
+                        </span>
+                        <svg class="w-4 h-4 text-slate-400 transition-transform" :class="open ? 'rotate-180' : ''"
+                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                </button>
+
+                {# Accounts list #}
+                <div x-show="open" x-cloak class="border-t border-slate-700">
+                    {% if mailDomain.mailAccounts is empty %}
+                        <div class="px-5 py-6 text-center">
+                            <p class="text-slate-500 text-sm">No mail accounts in this domain yet.</p>
+                            <a href="{{ path('app_mail_account_create') }}"
+                               class="inline-flex items-center gap-1.5 mt-2 text-indigo-400 hover:text-indigo-300 text-sm transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                Create one now
+                            </a>
+                        </div>
+                    {% else %}
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-slate-900/30">
+                                    <th class="text-left text-xs font-medium text-slate-500 px-5 py-2.5">Email</th>
+                                    <th class="text-left text-xs font-medium text-slate-500 px-5 py-2.5">Quota</th>
+                                    <th class="text-left text-xs font-medium text-slate-500 px-5 py-2.5">Created</th>
+                                    <th class="px-5 py-2.5"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-700/50">
+                                {% for account in mailDomain.mailAccounts %}
+                                    <tr class="hover:bg-slate-700/20 transition-colors" x-data="{ delModal: false }">
+                                        <td class="px-5 py-3">
+                                            <div class="flex items-center gap-2.5">
+                                                <div class="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center text-xs font-semibold text-slate-300">
+                                                    {{ account.email|first|upper }}
+                                                </div>
+                                                <span class="text-white text-sm">{{ account.email }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-5 py-3">
+                                            <span class="text-slate-400 text-xs">{{ account.quota }} MB</span>
+                                        </td>
+                                        <td class="px-5 py-3">
+                                            <span class="text-slate-500 text-xs">{{ account.createdAt ? account.createdAt|date('M j, Y') : '—' }}</span>
+                                        </td>
+                                        <td class="px-5 py-3 text-right">
+                                            <button @click="delModal = true"
+                                                    class="inline-flex items-center gap-1 px-2.5 py-1 bg-red-900/40 hover:bg-red-800/60 border border-red-800 hover:border-red-600 text-red-400 hover:text-red-300 text-xs font-medium rounded-lg transition-all">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                </svg>
+                                                Delete
+                                            </button>
+
+                                            {# Delete modal — teleported to <body> to avoid invalid table nesting #}
+                                            <template x-teleport="body">
+                                                <div x-show="delModal" x-cloak
+                                                     class="fixed inset-0 z-50 flex items-center justify-center p-4">
+                                                    <div class="fixed inset-0 bg-black/70" @click="delModal = false"></div>
+                                                    <div class="relative bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-6 w-full max-w-sm">
+                                                        <div class="w-12 h-12 rounded-full bg-red-900/50 flex items-center justify-center mx-auto mb-4">
+                                                            <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                                            </svg>
+                                                        </div>
+                                                        <h3 class="text-white font-semibold text-center mb-1">Delete Mailbox</h3>
+                                                        <p class="text-slate-400 text-sm text-center mb-6">
+                                                            Delete <strong class="text-white">{{ account.email }}</strong>? This action cannot be undone.
+                                                        </p>
+                                                        <form method="post" action="{{ path('app_mail_account_delete', {id: account.id}) }}">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete_mail_' ~ account.id) }}">
+                                                            <div class="flex gap-3">
+                                                                <button type="button" @click="delModal = false"
+                                                                        class="flex-1 py-2.5 px-4 bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm font-medium rounded-lg transition-colors">
+                                                                    Cancel
+                                                                </button>
+                                                                <button type="submit"
+                                                                        class="flex-1 py-2.5 px-4 bg-red-600 hover:bg-red-500 text-white text-sm font-semibold rounded-lg transition-colors">
+                                                                    Delete
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% endblock %}
