@@ -1,0 +1,12 @@
+/.env
+/.env.local
+/.env.*.local
+/config/jwt/
+/var/
+/vendor/
+/node_modules/
+/public/bundles/
+/public/build/
+*.db
+.DS_Store
+*.swp
