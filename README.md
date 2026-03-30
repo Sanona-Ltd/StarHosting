@@ -8,8 +8,7 @@
 
 [![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?style=flat-square&logo=php)](https://www.php.net/)
 [![Symfony](https://img.shields.io/badge/Symfony-7.1-000000?style=flat-square&logo=symfony)](https://symfony.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
-
+<!-- [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE) -->
 </div>
 
 ---

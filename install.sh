@@ -297,15 +297,19 @@ setup_app() {
 
     info "Creating var/ directory…"
     mkdir -p "$INSTALL_DIR/var"
-    chown -R www-data:www-data "$INSTALL_DIR/var"
 
     info "Installing PHP dependencies…"
-    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --no-dev --optimize-autoloader --quiet
+    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --no-dev --optimize-autoloader
     success "Composer packages installed."
+
+    info "Setting file permissions…"
+    chown -R www-data:www-data "$INSTALL_DIR/var"
 
     info "Running database migrations…"
     php "$INSTALL_DIR/bin/console" doctrine:migrations:migrate --no-interaction --quiet
     success "Database schema created."
+
+    chown -R www-data:www-data "$INSTALL_DIR/var"
 }
 
 # ─────────────────────────────────────────────────────────────
