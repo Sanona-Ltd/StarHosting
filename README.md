@@ -147,4 +147,4 @@ Contributions are welcome! Please open an issue first to discuss what you would 
 
 ## 📄 License
 
-Copyright © 2024 [Sanona Ltd](https://sanona.ltd). Released under the [MIT License](LICENSE).
+<!-- Copyright © 2024 [Sanona Ltd](https://sanona.ltd). Released under the [MIT License](LICENSE). -->

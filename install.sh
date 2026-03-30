@@ -297,6 +297,7 @@ setup_app() {
 
     info "Creating var/ directory…"
     mkdir -p "$INSTALL_DIR/var"
+    chmod +x "$INSTALL_DIR/bin/console"
 
     info "Installing PHP dependencies…"
     COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --no-dev --optimize-autoloader
